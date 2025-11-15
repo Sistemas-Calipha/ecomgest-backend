@@ -25,6 +25,16 @@ app.use(express.json());
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
 console.log("✅ Conectado a Supabase:", process.env.SUPABASE_URL);
 
+// ===================== TEST DIRECTO ===================== //
+supabase
+  .from("usuarios")
+  .select("*")
+  .limit(1)
+  .then(r => {
+    console.log("🔥 TEST DIRECTO SUPABASE →", r);
+  });
+
+
 // ======================================================
 // =============== HELPERS DE AUDITORÍA =================
 // ======================================================
