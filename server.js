@@ -140,8 +140,12 @@ function autorizarPermiso(nombrePermiso) {
 // ======================================================
 
 app.post("/login", async (req, res) => {
+  console.log(">>>>>>>>>> BODY RECIBIDO <<<<<<<<<<");
+  console.log(req.body);  // 👈 ESTE LOG ES INDISPENSABLE
+
   const { correo, contrasena } = req.body;
   const { ip, userAgent } = getRequestMeta(req);
+  
 
   if (!correo || !contrasena) {
     await registrarAuditoria({
