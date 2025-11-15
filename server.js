@@ -49,7 +49,7 @@ async function registrarAuditoria({
   userAgent = null,
 }) {
   try {
-    const { error } = await supabase.from("auditoria").insert([
+    const result = await supabase.from("auditoria").insert([
       {
         usuario_id: usuarioId,
         accion,
@@ -59,13 +59,13 @@ async function registrarAuditoria({
       },
     ]);
 
-    if (error) {
-      console.error("❌ Error guardando auditoría:", error.message);
-    }
+    console.log("📌 Resultado auditoría:", result);
+
   } catch (err) {
-    console.error("❌ Excepción guardando auditoría:", err.message);
+    console.error("❌ Excepción guardando auditoría COMPLETA:", err);
   }
 }
+
 
 // ======================================================
 // =============== MIDDLEWARE AUTENTICACIÓN =============
@@ -145,7 +145,7 @@ app.post("/login", async (req, res) => {
 
   const { correo, contrasena } = req.body;
   const { ip, userAgent } = getRequestMeta(req);
-  
+
 
   if (!correo || !contrasena) {
     await registrarAuditoria({
