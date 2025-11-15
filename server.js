@@ -1240,6 +1240,15 @@ app.get("/", (req, res) => {
 });
 
 
+app.get("/health", (req, res) => {
+  res.json({
+    ok: true,
+    message: "Backend operativo en Render 🚀",
+    timestamp: new Date().toISOString(),
+  });
+});
+
+
 // ======================================================
 // ================== INICIAR SERVIDOR ==================
 // ======================================================
