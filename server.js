@@ -9,8 +9,24 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { createClient } from "@supabase/supabase-js";
 
-// ------------------ CONFIGURACIONES ------------------ //
+// ======================================================
+// =============== CARGA DE VARIABLES ENV ===============
+// ======================================================
+
+// Cargar .env (en Render no es necesario, pero local sí)
 dotenv.config();
+
+console.log("🟦 DEBUG ENV → Cargando variables desde entorno…");
+console.log("SUPABASE_URL:", process.env.SUPABASE_URL);
+console.log("SUPABASE_KEY:", process.env.SUPABASE_KEY ? "[OK]" : "[VACÍO]");
+console.log("JWT_SECRET:", process.env.JWT_SECRET ? "[OK]" : "[VACÍO]");
+console.log("PORT:", process.env.PORT);
+
+if (!process.env.SUPABASE_URL || !process.env.SUPABASE_KEY) {
+  console.error("❌ ERROR CRÍTICO → Faltan SUPABASE_URL o SUPABASE_KEY");
+}
+
+// ------------------ CONFIGURACIONES ------------------ //
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -21,19 +37,41 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-// ------------------ CONEXIÓN SUPABASE ------------------ //
-const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
-console.log("✅ Conectado a Supabase:", process.env.SUPABASE_URL);
+// ======================================================
+// =================== CONEXIÓN SUPABASE =================
+// ======================================================
+
+// Validación defensiva
+if (!process.env.SUPABASE_URL || !process.env.SUPABASE_KEY) {
+  console.error("❌ No puedo iniciar Supabase: faltan SUPABASE_URL o SUPABASE_KEY");
+}
+
+console.log("🟦 Creando cliente Supabase…");
+
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_KEY,
+  {
+    auth: {
+      autoRefreshToken: false,
+      persistSession: false,
+    },
+  }
+);
+
+console.log("🟩 Supabase inicializado con:", process.env.SUPABASE_URL);
 
 // ===================== TEST DIRECTO ===================== //
 supabase
   .from("usuarios")
   .select("*")
   .limit(1)
-  .then(r => {
+  .then((r) => {
     console.log("🔥 TEST DIRECTO SUPABASE →", r);
+  })
+  .catch((err) => {
+    console.error("🔥 ERROR TEST DIRECTO SUPABASE →", err);
   });
-
 
 // ======================================================
 // =============== HELPERS DE AUDITORÍA =================
@@ -70,12 +108,10 @@ async function registrarAuditoria({
     ]);
 
     console.log("📌 Resultado auditoría:", result);
-
   } catch (err) {
     console.error("❌ Excepción guardando auditoría COMPLETA:", err);
   }
 }
-
 
 // ======================================================
 // =============== MIDDLEWARE AUTENTICACIÓN =============
@@ -151,11 +187,10 @@ function autorizarPermiso(nombrePermiso) {
 
 app.post("/login", async (req, res) => {
   console.log(">>>>>>>>>> BODY RECIBIDO <<<<<<<<<<");
-  console.log(req.body);  // 👈 ESTE LOG ES INDISPENSABLE
+  console.log(req.body); // 👈 Log útil
 
   const { correo, contrasena } = req.body;
   const { ip, userAgent } = getRequestMeta(req);
-
 
   if (!correo || !contrasena) {
     await registrarAuditoria({
@@ -349,9 +384,6 @@ app.post("/demo", async (req, res) => {
   }
 });
 
-
-
-
 // ======================================================
 // ================= PERFIL DEL USUARIO =================
 // ======================================================
@@ -396,7 +428,6 @@ app.get("/perfil", verificarToken, async (req, res) => {
     return res.status(500).json({ mensaje: "Error interno del servidor." });
   }
 });
-
 
 // ======================================================
 // =============== CRUD USUARIOS (PERMISOS) =============
@@ -706,7 +737,6 @@ app.post(
   }
 );
 
-
 // ======================================================
 // ================= CRUD ROLES (PERMISOS) ==============
 // ======================================================
@@ -851,7 +881,6 @@ app.patch(
   }
 );
 
-
 // ======================================================
 // ===== CRUD ASIGNACIÓN DE PERMISOS A ROLES ============
 // ======================================================
@@ -896,7 +925,6 @@ app.post(
     }
 
     try {
-      // Insertar múltiples permisos
       const inserts = permisos.map((pid) => ({
         rol_id: id,
         permiso_id: pid,
@@ -1184,7 +1212,6 @@ app.post(
   }
 );
 
-
 // ======================================================
 // ================== ENDPOINTS DE TESTEO ===============
 // ======================================================
@@ -1243,7 +1270,6 @@ app.get(
   }
 );
 
-
 // ======================================================
 // =================== FRONTEND STATIC ==================
 // ======================================================
@@ -1253,7 +1279,6 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "frontend", "index.html"));
 });
 
-
 app.get("/health", (req, res) => {
   res.json({
     ok: true,
@@ -1261,7 +1286,6 @@ app.get("/health", (req, res) => {
     timestamp: new Date().toISOString(),
   });
 });
-
 
 // ======================================================
 // ================== INICIAR SERVIDOR ==================
