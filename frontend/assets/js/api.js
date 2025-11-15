@@ -1,6 +1,10 @@
 // assets/js/api.js
 
-const API_URL = "http://localhost:3000";
+// Detecta si estamos en localhost o en producción
+const API_URL =
+  window.location.hostname === "localhost"
+    ? "http://localhost:3000"
+    : "https://ecomgest-backend.onrender.com";
 
 const api = {
   post: (endpoint, data) =>
