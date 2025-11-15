@@ -1,0 +1,45 @@
+<!-- frontend/login.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>ECOMGEST - Login</title>
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+
+<body class="login-page">
+
+  <div class="login-container">
+    <h2>ECOMGEST</h2>
+    <p class="sub">Acceso al sistema</p>
+
+    <div class="form-group">
+      <input 
+        type="email" 
+        id="correo" 
+        placeholder="Correo" 
+        autocomplete="email"
+        required
+      >
+
+      <input 
+        type="password" 
+        id="contrasena" 
+        placeholder="Contraseña" 
+        autocomplete="current-password"
+        required
+      >
+
+      <button id="btnLogin">Ingresar</button>
+
+      <p id="msgError" class="error"></p>
+    </div>
+  </div>
+
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/login.js"></script>
+
+</body>
+</html>

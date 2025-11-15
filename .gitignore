@@ -1,0 +1,8 @@
+# Ignorar dependencias
+node_modules/
+
+# Ignorar variables de entorno
+.env
+
+# Ignorar archivos generados por Prisma (si existieran en el futuro)
+prisma/generated/

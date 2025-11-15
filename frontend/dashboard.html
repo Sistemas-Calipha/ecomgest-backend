@@ -1,0 +1,38 @@
+<!-- frontend/dashboard.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Dashboard - ECOMGEST</title>
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+
+<body>
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <h1>ECOMGEST</h1>
+
+    <div class="user-area">
+      <span id="nombreUsuario"></span>
+      <button id="btnLogout">Salir</button>
+    </div>
+  </header>
+
+  <!-- CONTENIDO -->
+  <main>
+    <h2>Bienvenido al sistema 👋</h2>
+    <p>Aquí vas a ver tus módulos, paneles, reportes y todo lo demás.</p>
+
+    <div id="contenidoDinamico"></div>
+  </main>
+
+  <!-- SCRIPTS (en orden) -->
+  <script src="assets/js/api.js"></script>
+  <script src="assets/js/auth.js"></script>
+  <script src="assets/js/dashboard.js"></script>
+
+</body>
+</html>
