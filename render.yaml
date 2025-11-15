@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: ecomgest-backend
+    env: node
+    plan: free
+    buildCommand: "npm install"
+    startCommand: "node server.js"
+    runtime: "node"
+    nodeVersion: "20.11.0"
