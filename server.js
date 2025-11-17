@@ -1,3 +1,6 @@
+import fetch from "cross-fetch";
+global.fetch = fetch;
+
 // ------------------ IMPORTACIONES ------------------ //
 import express from "express";
 import cors from "cors";
