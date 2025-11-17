@@ -51,6 +51,11 @@ if (!process.env.SUPABASE_URL || !process.env.SUPABASE_KEY) {
 console.log("🟦 Creando cliente Supabase…");
 
 const supabase = createClient(
+
+  console.log("🟦 DEBUG: SUPABASE_KEY (primeros 30 chars):", process.env.SUPABASE_KEY?.substring(0, 30)),
+  console.log("🟦 DEBUG: SUPABASE_URL:", process.env.SUPABASE_URL),
+
+
   process.env.SUPABASE_URL,
   process.env.SUPABASE_KEY,
   {
