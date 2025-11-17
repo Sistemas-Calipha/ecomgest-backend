@@ -51,11 +51,6 @@ if (!process.env.SUPABASE_URL || !process.env.SUPABASE_KEY) {
 console.log("🟦 Creando cliente Supabase…");
 
 const supabase = createClient(
-
-  console.log("🟦 DEBUG: SUPABASE_KEY (primeros 30 chars):", process.env.SUPABASE_KEY?.substring(0, 30)),
-  console.log("🟦 DEBUG: SUPABASE_URL:", process.env.SUPABASE_URL),
-
-
   process.env.SUPABASE_URL,
   process.env.SUPABASE_KEY,
   {
@@ -65,6 +60,9 @@ const supabase = createClient(
     },
   }
 );
+
+console.log("🟦 DEBUG: SUPABASE_KEY (primeros 40 chars):", process.env.SUPABASE_KEY?.substring(0, 30));
+console.log("🟦 DEBUG: SUPABASE_URL:", process.env.SUPABASE_URL);
 
 console.log("🟩 Supabase inicializado con:", process.env.SUPABASE_URL);
 
@@ -200,13 +198,13 @@ app.post("/login", async (req, res) => {
   const { ip, userAgent } = getRequestMeta(req);
 
   if (!correo || !contrasena) {
-    //await registrarAuditoria({
-      //usuarioId: null,
-      //accion: "LOGIN_DATOS_INCOMPLETOS",
-      //detalle: { correo_intentado: correo },
-      //ip,
-      //userAgent,
-    //});
+    await registrarAuditoria({
+      usuarioId: null,
+      accion: "LOGIN_DATOS_INCOMPLETOS",
+      detalle: { correo_intentado: correo },
+      ip,
+      userAgent,
+    });
 
     return res.status(400).json({ mensaje: "Faltan datos obligatorios." });
   }
@@ -219,13 +217,13 @@ app.post("/login", async (req, res) => {
       .limit(1);
 
     if (!usuarios?.length) {
-      //await registrarAuditoria({
-        //usuarioId: null,
-        //accion: "LOGIN_FALLIDO_NO_EXISTE",
-        //detalle: { correo_intentado: correo },
-        //ip,
-        //userAgent,
-      //});
+      await registrarAuditoria({
+        usuarioId: null,
+        accion: "LOGIN_FALLIDO_NO_EXISTE",
+        detalle: { correo_intentado: correo },
+        ip,
+        userAgent,
+      });
 
       return res.status(401).json({ mensaje: "Credenciales inválidas." });
     }
@@ -234,13 +232,13 @@ app.post("/login", async (req, res) => {
     const passwordValida = await bcrypt.compare(contrasena, usuario.contrasena);
 
     if (!passwordValida) {
-      //await registrarAuditoria({
-        //usuarioId: usuario.id,
-        //accion: "LOGIN_FALLIDO_PASSWORD",
-        //detalle: { correo },
-        //ip,
-        //userAgent,
-      //});
+      await registrarAuditoria({
+        usuarioId: usuario.id,
+        accion: "LOGIN_FALLIDO_PASSWORD",
+        detalle: { correo },
+        ip,
+        userAgent,
+      });
 
       return res.status(401).json({ mensaje: "Credenciales inválidas." });
     }
@@ -276,13 +274,13 @@ app.post("/login", async (req, res) => {
     });
   } catch (error) {
     console.error("Error en login:", error);
-    //await registrarAuditoria({
-     // usuarioId: null,
-     // accion: "LOGIN_ERROR_INTERNO",
-    //  detalle: { correo, error: error.message },
-   //   ip,
-   //   userAgent,
-  //  });
+    await registrarAuditoria({
+      usuarioId: null,
+      accion: "LOGIN_ERROR_INTERNO",
+      detalle: { correo, error: error.message },
+      ip,
+      userAgent,
+    });
     res.status(500).json({ mensaje: "Error interno del servidor." });
   }
 });
