@@ -1,4 +1,3 @@
-<!-- frontend/dashboard.html -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -6,12 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>Dashboard - ECOMGEST</title>
+
+  <!-- Styles -->
   <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 
 <body class="panel-body">
 
-  <!-- SIDEBAR LATERAL -->
+  <!-- ============================
+       SIDEBAR LATERAL
+  ============================= -->
   <aside id="sidebar" class="sidebar expanded">
 
     <div class="sidebar-header">
@@ -20,30 +23,34 @@
     </div>
 
     <nav class="menu">
-      <a href="#" class="menu-item active">
+
+      <a href="#" id="menuDashboard" class="menu-item active">
         <span class="icon">🏠</span>
         <span class="label">Dashboard</span>
       </a>
 
-      <a href="#" class="menu-item">
+      <a href="#" id="menuUsers" class="menu-item">
         <span class="icon">👤</span>
         <span class="label">Usuarios</span>
       </a>
 
-      <a href="#" class="menu-item">
+      <a href="#" id="menuRoles" class="menu-item">
         <span class="icon">🛡</span>
         <span class="label">Roles y Permisos</span>
       </a>
 
-      <a href="#" class="menu-item">
+      <a href="#" id="menuConfig" class="menu-item">
         <span class="icon">⚙️</span>
         <span class="label">Configuración</span>
       </a>
+
     </nav>
 
   </aside>
 
-  <!-- CONTENIDO PRINCIPAL -->
+  <!-- ============================
+       CONTENIDO PRINCIPAL
+  ============================= -->
   <main class="main-content">
 
     <!-- TOPBAR SUPERIOR -->
@@ -55,22 +62,29 @@
       <button id="btnLogout" class="logout-btn">Salir</button>
     </header>
 
-    <!-- ÁREA DE CONTENIDO DINÁMICO -->
-    <section class="content-area">
-      <h1>Bienvenido al sistema 👋</h1>
-      <p>Aquí vas a ver tus módulos, paneles, reportes y todo lo demás.</p>
-
-      <div id="contenidoDinamico"></div>
+    <!-- ÁREA DE VISTAS -->
+    <section class="content-area" id="viewContainer">
+      <!-- Vista inicial por defecto -->
+      <div class="default-view">
+        <h1 class="title-welcome">Bienvenido al sistema 👋</h1>
+        <p class="subtitle-welcome">
+          Aquí vas a ver tus módulos, paneles, reportes y todo lo demás.
+        </p>
+      </div>
     </section>
 
   </main>
 
-  <!-- SCRIPTS ORIGINALES -->
+  <!-- ============================
+       SCRIPTS
+  ============================= -->
   <script src="assets/js/api.js"></script>
   <script src="assets/js/auth.js"></script>
   <script src="assets/js/dashboard.js"></script>
 
-  <!-- MODAL LOGOUT (OPCIÓN 2 - GLASSMORPHISM) -->
+  <!-- ============================
+       MODAL LOGOUT
+  ============================= -->
   <div id="logoutModal" class="modal-overlay hidden">
     <div class="modal-box">
       <h3>¿Seguro que deseas salir?</h3>

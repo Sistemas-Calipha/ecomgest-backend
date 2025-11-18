@@ -8,7 +8,8 @@ console.log("🔥 dashboard.js cargado");
 document.addEventListener("DOMContentLoaded", async () => {
   await cargarUsuario();
   configurarLogout();
-  configurarSidebar();   // ← Nuevo
+  configurarSidebar();
+  configurarMenu(); // ← Nuevo
 });
 
 // --------------------------------------------
@@ -21,7 +22,7 @@ async function cargarUsuario() {
     const respuesta = await api.get("/auth/test-token");
     const datos = await respuesta.json();
 
-    console.log("📥 Respuesta test-token: ", datos);
+    console.log("📥 Respuesta test-token:", datos);
 
     if (!respuesta.ok || !datos.usuario) {
       throw new Error("Token inválido");
@@ -68,17 +69,14 @@ function configurarLogout() {
 
   if (!btn) return;
 
-  // Abrir modal
   btn.addEventListener("click", () => {
     document.getElementById("logoutModal").classList.remove("hidden");
   });
 
-  // Cancelar
   document.getElementById("cancelLogout").addEventListener("click", () => {
     document.getElementById("logoutModal").classList.add("hidden");
   });
 
-  // Confirmar
   document.getElementById("confirmLogout").addEventListener("click", () => {
     localStorage.clear();
     window.location.href = "login.html";
@@ -96,5 +94,58 @@ function configurarSidebar() {
 
   toggleBtn.addEventListener("click", () => {
     sidebar.classList.toggle("collapsed");
+  });
+}
+
+// --------------------------------------------
+// Cargar vistas dinámicas dentro del dashboard
+// --------------------------------------------
+async function loadView(path) {
+  try {
+    console.log("📄 loadView() → intentando cargar:", path);
+
+    const container = document.querySelector(".content-area");
+    if (!container) {
+      console.error("❌ No se encontró .content-area");
+      return;
+    }
+
+    const response = await fetch(path);
+
+    if (!response.ok) {
+      container.innerHTML = `<p style="color:red;">❌ Error cargando vista: ${path}</p>`;
+      console.error("❌ Error HTTP:", response.status);
+      return;
+    }
+
+    const html = await response.text();
+    container.innerHTML = html;
+
+    console.log("✅ Vista cargada correctamente:", path);
+
+  } catch (error) {
+    console.error("❌ Error cargando vista:", error);
+  }
+}
+
+// --------------------------------------------
+// Navegación del menú lateral
+// --------------------------------------------
+function configurarMenu() {
+  console.log("📌 Inicializando menú lateral…");
+
+  const menuUsers = document.getElementById("menuUsers");
+
+  console.log("🔍 menuUsers encontrado?", !!menuUsers);
+
+  if (!menuUsers) {
+    console.error("❌ No se encontró #menuUsers");
+    return;
+  }
+
+  menuUsers.addEventListener("click", (e) => {
+    e.preventDefault();
+    console.log("👉 Clic en Usuarios");
+    loadView("modules/users/users.html");
   });
 }

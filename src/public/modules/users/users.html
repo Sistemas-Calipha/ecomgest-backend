@@ -1,0 +1,65 @@
+<div class="glass-card users-module">
+  <!-- Encabezado -->
+  <div class="users-header">
+    <div>
+      <h2 class="users-title">👤 Gestión de Usuarios</h2>
+      <p class="users-subtitle">
+        Administra las cuentas, roles y accesos de todos los usuarios del sistema.
+      </p>
+    </div>
+
+    <div class="users-actions">
+      <button class="btn-primary" id="btnNewUser">+ Crear nuevo usuario</button>
+    </div>
+  </div>
+
+  <!-- Contenedor principal -->
+  <div class="users-body">
+    <!-- Barra superior (búsqueda y filtros) -->
+    <div class="users-toolbar">
+      <input
+        type="text"
+        id="userSearch"
+        class="input-search"
+        placeholder="Buscar por nombre o correo..."
+      />
+
+      <select id="userRoleFilter" class="input-select">
+        <option value="">Todos los roles</option>
+        <option value="admin">Administradores</option>
+        <option value="operador">Operadores</option>
+        <option value="cliente">Clientes</option>
+      </select>
+
+      <select id="userStatusFilter" class="input-select">
+        <option value="">Todos los estados</option>
+        <option value="activo">Activos</option>
+        <option value="inactivo">Inactivos</option>
+      </select>
+    </div>
+
+    <!-- Tabla de usuarios -->
+    <div class="users-table-wrapper">
+      <table class="users-table">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Correo</th>
+            <th>Rol</th>
+            <th>Estado</th>
+            <th>Último acceso</th>
+            <th style="width: 130px;">Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="usersTableBody">
+          <!-- Aquí se insertarán los usuarios desde JS -->
+          <tr>
+            <td colspan="6" class="table-placeholder">
+              Aún no hay usuarios cargados. Muy pronto verás la información aquí.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -37,7 +37,11 @@ async function validarAcceso() {
   }
 }
 
-export function logout() {
+function logout() {
   localStorage.clear();
   window.location.href = "login.html";
 }
+
+// (Opcional, pero útil si algún HTML lo quiere usar directamente)
+window.logout = logout;
+
