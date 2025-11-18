@@ -82,46 +82,6 @@ supabase
   });
 
 // ======================================================
-// =============== HELPERS DE AUDITORÍA =================
-// ======================================================
-
-function getRequestMeta(req) {
-  const ip =
-    (req.headers["x-forwarded-for"]?.split(",")[0]) ||
-    req.ip ||
-    req.connection?.remoteAddress ||
-    null;
-
-  const userAgent = req.headers["user-agent"] || null;
-
-  return { ip, userAgent };
-}
-
-async function registrarAuditoria({
-  usuarioId = null,
-  accion,
-  detalle = {},
-  ip = null,
-  userAgent = null,
-}) {
-  try {
-    const result = await supabase.from("auditoria").insert([
-      {
-        usuario_id: usuarioId,
-        accion,
-        detalle,
-        ip,
-        user_agent: userAgent,
-      },
-    ]);
-
-    console.log("📌 Resultado auditoría:", result);
-  } catch (err) {
-    console.error("❌ Excepción guardando auditoría COMPLETA:", err);
-  }
-}
-
-// ======================================================
 // =============== MIDDLEWARE AUTENTICACIÓN =============
 // ======================================================
 
