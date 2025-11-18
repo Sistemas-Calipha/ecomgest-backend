@@ -2,12 +2,13 @@
 console.log("🔥 dashboard.js cargado");
 
 // ============================================
-// dashboard.js - Versión estable y FUNCIONAL
+// DASHBOARD - VERSIÓN ORDENADA Y ESTABLE
 // ============================================
 
 document.addEventListener("DOMContentLoaded", async () => {
   await cargarUsuario();
   configurarLogout();
+  configurarSidebar();   // ← Nuevo
 });
 
 // --------------------------------------------
@@ -60,30 +61,40 @@ function mostrarSaludo(usuario) {
 }
 
 // --------------------------------------------
-// Logout seguro
+// Logout seguro + modal
 // --------------------------------------------
 function configurarLogout() {
   const btn = document.getElementById("btnLogout");
-  const modal = document.getElementById("modalLogout");
-  const btnCancelar = document.getElementById("cancelLogout");
-  const btnConfirmar = document.getElementById("confirmLogout");
 
   if (!btn) return;
 
-btn.addEventListener("click", () => {
-  document.getElementById("logoutModal").classList.remove("hidden");
-});
+  // Abrir modal
+  btn.addEventListener("click", () => {
+    document.getElementById("logoutModal").classList.remove("hidden");
+  });
 
-// Botón cancelar
-document.getElementById("cancelLogout").addEventListener("click", () => {
-  document.getElementById("logoutModal").classList.add("hidden");
-});
+  // Cancelar
+  document.getElementById("cancelLogout").addEventListener("click", () => {
+    document.getElementById("logoutModal").classList.add("hidden");
+  });
 
-// Botón confirmar
-document.getElementById("confirmLogout").addEventListener("click", () => {
-  localStorage.clear();
-  window.location.href = "login.html";
-});
-
+  // Confirmar
+  document.getElementById("confirmLogout").addEventListener("click", () => {
+    localStorage.clear();
+    window.location.href = "login.html";
+  });
 }
 
+// --------------------------------------------
+// SIDEBAR COLLAPSE (Premium)
+// --------------------------------------------
+function configurarSidebar() {
+  const sidebar = document.getElementById("sidebar");
+  const toggleBtn = document.getElementById("toggleSidebar");
+
+  if (!toggleBtn) return;
+
+  toggleBtn.addEventListener("click", () => {
+    sidebar.classList.toggle("collapsed");
+  });
+}
