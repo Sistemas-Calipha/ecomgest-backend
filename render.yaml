@@ -4,6 +4,6 @@ services:
     env: node
     plan: free
     buildCommand: "npm install"
-    startCommand: "node server.js"
+    startCommand: "node src/server.js"
     runtime: "node"
     nodeVersion: "20.11.0"

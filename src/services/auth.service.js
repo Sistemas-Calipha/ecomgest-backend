@@ -4,8 +4,14 @@ import jwt from "jsonwebtoken";
 import { registerAudit } from "./audit.service.js";
 import { getRequestMeta } from "../middlewares/audit.middleware.js";
 
+//
+// LOGIN
+//
 export async function loginService(req) {
-  const { correo, contrasena } = req.body;
+  // Aceptamos ambos formatos de entrada
+  const correo = req.body.correo || req.body.email;
+  const contrasena = req.body.contrasena || req.body.password;
+
   const { ip, userAgent } = getRequestMeta(req);
 
   if (!correo || !contrasena) {
@@ -89,6 +95,9 @@ export async function loginService(req) {
   };
 }
 
+//
+// REGISTER
+//
 export async function registerService(req) {
   const { nombre_completo, correo, contrasena, rol_id = 4 } = req.body;
 
@@ -98,7 +107,6 @@ export async function registerService(req) {
 
   const { ip, userAgent } = getRequestMeta(req);
 
-  // Verificación de existencia
   const { data: exists } = await supabase
     .from("usuarios")
     .select("id")
@@ -143,6 +151,9 @@ export async function registerService(req) {
   };
 }
 
+//
+// DEMO ACCOUNT
+//
 export async function createDemoAccount(req) {
   const timestamp = Date.now();
   const correo = `invitado_${timestamp}@demo.com`;

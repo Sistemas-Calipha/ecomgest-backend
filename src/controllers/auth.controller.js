@@ -1,10 +1,11 @@
 import {
   loginService,
   registerService,
-  createDemoAccount,
+  createDemoAccount
 } from "../services/auth.service.js";
 
 export async function loginController(req, res) {
+  console.log("🟡 BODY RECIBIDO EN LOGIN:", req.body);
   const result = await loginService(req);
 
   if (result.error) {
