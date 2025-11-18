@@ -7,21 +7,23 @@ const API_URL =
     : "https://ecomgest-backend.onrender.com";
 
 const api = {
-  post: (endpoint, data) =>
-    fetch(API_URL + endpoint, {
+  post: async (endpoint, data) => {
+    return fetch(API_URL + endpoint, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
-    }),
+    });
+  },
 
-  get: (endpoint) =>
-    fetch(API_URL + endpoint, {
+  get: async (endpoint) => {
+    return fetch(API_URL + endpoint, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
         Authorization: "Bearer " + localStorage.getItem("token"),
       },
-    }),
+    });
+  },
 };

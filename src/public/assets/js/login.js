@@ -1,7 +1,7 @@
 // assets/js/login.js
-// ===============================
-// LOGIN (versión corregida)
-// ===============================
+// =====================================
+// LOGIN – versión final optimizada
+// =====================================
 
 document.addEventListener("DOMContentLoaded", () => {
   const inputCorreo = document.getElementById("correo");
@@ -26,30 +26,31 @@ document.addEventListener("DOMContentLoaded", () => {
     btnLogin.textContent = "Ingresando...";
 
     try {
-      // 1) Hacemos la petición
-      const respuesta = await api.post("/login", { correo, contrasena });
-
-      // 2) Intentamos leer el body como JSON
+      // 1) Petición al backend
+      const respuesta = await api.post("/auth/login", { correo, contrasena });
       const datos = await respuesta.json().catch(() => null);
 
+      console.log("📦 RESPUESTA DEL BACKEND:", datos);
+
       if (!respuesta.ok) {
-        const mensajeBackend = datos?.mensaje || "Credenciales incorrectas.";
-        msgError.textContent = mensajeBackend;
+        msgError.textContent = datos?.mensaje || "Credenciales incorrectas.";
         return;
       }
 
-      // 3) Si OK, debe venir token y usuario
-      if (!datos?.token || !datos?.usuario) {
+      // 2) Validación mínima
+      if (!datos?.token || !datos?.user) {
         msgError.textContent = "Respuesta inesperada del servidor.";
-        console.error("Login sin token o usuario:", datos);
+        console.error("⚠️ Login sin token o user:", datos);
         return;
       }
 
-      // 4) Guardamos token y usuario
+      // 3) Guardar token y usuario
       localStorage.setItem("token", datos.token);
-      localStorage.setItem("usuario", JSON.stringify(datos.usuario));
+      localStorage.setItem("usuario", JSON.stringify(datos.user));
 
-      // 5) Redirigimos al dashboard
+      console.log("🔐 TOKEN GUARDADO:", datos.token);
+
+      // 4) 👉 Redirección directa (ya no necesitamos el delay)
       window.location.href = "dashboard.html";
 
     } catch (error) {
@@ -61,6 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
+  // Eventos
   btnLogin.addEventListener("click", hacerLogin);
 
   inputCorreo.addEventListener("keydown", (e) => {

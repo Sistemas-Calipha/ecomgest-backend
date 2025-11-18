@@ -1,5 +1,6 @@
 import supabase from "../config/supabase.js";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
+console.log("🟦 BCRYPT LIBRARY:", bcrypt);
 import jwt from "jsonwebtoken";
 import { registerAudit } from "./audit.service.js";
 import { getRequestMeta } from "../middlewares/audit.middleware.js";

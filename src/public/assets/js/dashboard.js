@@ -2,7 +2,7 @@
 console.log("🔥 dashboard.js cargado");
 
 // ============================================
-// dashboard.js - Versión estable
+// dashboard.js - Versión estable y FUNCIONAL
 // ============================================
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -11,20 +11,22 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 // --------------------------------------------
-// Cargar perfil del usuario desde backend
+// Obtener usuario desde /auth/test-token
 // --------------------------------------------
 async function cargarUsuario() {
   try {
-    const respuesta = await api.get("/perfil");
+    console.log("🔍 Verificando token...");
 
-    if (!respuesta.ok) {
-      throw new Error("No autorizado");
+    const respuesta = await api.get("/auth/test-token");
+    const datos = await respuesta.json();
+
+    console.log("📥 Respuesta test-token: ", datos);
+
+    if (!respuesta.ok || !datos.usuario) {
+      throw new Error("Token inválido");
     }
 
-    const datos = await respuesta.json();
     const usuario = datos.usuario;
-
-    if (!usuario) throw new Error("Usuario no encontrado");
 
     localStorage.setItem("usuario", JSON.stringify(usuario));
 
@@ -33,11 +35,11 @@ async function cargarUsuario() {
 
     mostrarSaludo(usuario);
 
-  } catch (error) {
-    console.error("❌ Error cargando perfil:", error);
+    console.log("✅ Dashboard listo");
 
-    localStorage.removeItem("token");
-    localStorage.removeItem("usuario");
+  } catch (error) {
+    console.error("❌ Error:", error);
+    localStorage.clear();
     window.location.href = "login.html";
   }
 }
@@ -54,9 +56,7 @@ function mostrarSaludo(usuario) {
   else saludo = "Buenas noches";
 
   const titulo = document.querySelector("main h2");
-  if (titulo) {
-    titulo.textContent = `${saludo}, ${usuario.nombre_completo} 👋`;
-  }
+  if (titulo) titulo.textContent = `${saludo}, ${usuario.nombre_completo} 👋`;
 }
 
 // --------------------------------------------
@@ -64,12 +64,26 @@ function mostrarSaludo(usuario) {
 // --------------------------------------------
 function configurarLogout() {
   const btn = document.getElementById("btnLogout");
+  const modal = document.getElementById("modalLogout");
+  const btnCancelar = document.getElementById("cancelLogout");
+  const btnConfirmar = document.getElementById("confirmLogout");
+
   if (!btn) return;
 
-  btn.addEventListener("click", () => {
-    if (!confirm("¿Seguro que deseas salir?")) return;
+btn.addEventListener("click", () => {
+  document.getElementById("logoutModal").classList.remove("hidden");
+});
 
-    localStorage.clear();
-    window.location.href = "login.html";
-  });
+// Botón cancelar
+document.getElementById("cancelLogout").addEventListener("click", () => {
+  document.getElementById("logoutModal").classList.add("hidden");
+});
+
+// Botón confirmar
+document.getElementById("confirmLogout").addEventListener("click", () => {
+  localStorage.clear();
+  window.location.href = "login.html";
+});
+
 }
+
